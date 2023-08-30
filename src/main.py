@@ -4,6 +4,7 @@ from typing import Union
 from fastapi import FastAPI, APIRouter
 from models import Colors
 from lights import Lights
+from graph import graph_api
 
 
 class Hello:
@@ -29,6 +30,7 @@ def api(hello: Hello):
     app = FastAPI()
 
     app.include_router(hello.router)
+    app.mount("/graphql/", graph_api())
 
     return app
 
