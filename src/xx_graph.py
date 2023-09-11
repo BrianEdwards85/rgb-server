@@ -11,24 +11,24 @@ type_defs = gql(
 """
 )
 
+
 class GG:
     def __init__(self, name: str, query: QueryType) -> None:
-      self.name = name
-      query.set_field("hello", self.resolve_hello)
+        self.name = name
+        query.set_field("hello", self.resolve_hello)
 
     def resolve_hello(self, *_):
         return self.name
 
 
 def graph_api():
-  query = QueryType()
-  gg = GG("Hello?", query)
+    query = QueryType()
+    gg = GG("Hello?", query)
 
+    schema = make_executable_schema(type_defs, query)
+    app = GraphQL(schema, debug=True)
 
-  schema = make_executable_schema(type_defs, query)
-  app = GraphQL(schema, debug=True)
-
-  return app
+    return app
 
 
 async def main():
@@ -38,5 +38,6 @@ async def main():
     server = uvicorn.Server(config)
     await server.serve()
 
+
 if __name__ == "__main__":
-  asyncio.run(main())
+    asyncio.run(main())

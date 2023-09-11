@@ -4,7 +4,7 @@ from typing import Union
 from fastapi import FastAPI, APIRouter
 from models import Colors
 from lights import Lights
-from graph import graph_api
+from gql import graph_api
 
 
 class Hello:
@@ -26,18 +26,19 @@ class Hello:
         return {"colors": colors}
 
 
-def api(hello: Hello):
+def api(lights: Lights):
     app = FastAPI()
 
+    hello = Hello(lights)
     app.include_router(hello.router)
     app.mount("/graphql/", graph_api())
 
     return app
 
 
-async def main(hello: Hello):
+async def main(lights: Lights):
     config = uvicorn.Config(
-        lambda: api(hello), port=5000, host="0.0.0.0", log_level="info", factory=True
+        lambda: api(lights), port=5000, host="0.0.0.0", log_level="info", factory=True
     )
     server = uvicorn.Server(config)
     await server.serve()
@@ -45,6 +46,5 @@ async def main(hello: Hello):
 
 if __name__ == "__main__":
     lights = Lights(144)
-    hello = Hello(lights)
 
-    asyncio.run(main(hello))
+    asyncio.run(main(lights))
