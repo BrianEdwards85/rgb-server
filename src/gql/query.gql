@@ -1,3 +1,21 @@
 type Query {
     hello: String!
 }
+
+type Mutation {
+    greet(name: String!): String!
+    display(input: Colors!): String!
+}
+
+input Color {
+    r: Int = 0
+    g: Int = 0
+    b: Int = 0
+    bright: Int = 100
+}
+
+input Colors {
+    offset: Int = 0
+    count: Int = 0
+    color: [Color!]!
+}
